@@ -1,0 +1,14 @@
+# flush tables
+iptables -F
+iptables -P INPUT DROP 
+iptables -P FORWARD DROP
+iptbles -P OUTPUT DROP
+#ssh access
+iptables -A INPUT -i iw0 -p tcp -dport 22 -m state --state NEW, ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o iw0 -p tcp -sport 22 -m state --state ESTABLISHED -j ACCEPT
+# ping in2out
+iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+# ping out2in
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
